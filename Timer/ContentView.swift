@@ -42,18 +42,6 @@ struct ContentView: View {
     }
 }
 
-
-
-struct SecondView: View {
-    @Binding var hour: Int
-    @Binding var minute: Int
-    @Binding var seconds: Int
-
-    var body: some View {
-        Text("\(hour)")
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
