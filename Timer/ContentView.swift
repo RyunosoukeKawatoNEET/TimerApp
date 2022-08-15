@@ -32,7 +32,7 @@ struct ContentView: View {
                 Button(action: {
                     page = 1
                 }) {
-                    Text("殺意")
+                    Text("開始")
                         .padding()
                 }.frame(width: 200.0, height: 60.0).foregroundColor(.white).background(gradientView(start:Color.orange,end: Color.orange.opacity(0.5))).cornerRadius(20)
                 
