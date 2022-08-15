@@ -14,6 +14,7 @@
 		F5125800289661F000DBB43B /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51257FF289661F000DBB43B /* TimerTests.swift */; };
 		F512580A289661F000DBB43B /* TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5125809289661F000DBB43B /* TimerUITests.swift */; };
 		F512580C289661F000DBB43B /* TimerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F512580B289661F000DBB43B /* TimerUITestsLaunchTests.swift */; };
+		F512581B2896643600DBB43B /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F512581A2896643600DBB43B /* TimePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		F5125805289661F000DBB43B /* TimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5125809289661F000DBB43B /* TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITests.swift; sourceTree = "<group>"; };
 		F512580B289661F000DBB43B /* TimerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F512581A2896643600DBB43B /* TimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				F51257F0289661EF00DBB43B /* ContentView.swift */,
 				F51257F2289661F000DBB43B /* Assets.xcassets */,
 				F51257F4289661F000DBB43B /* Preview Content */,
+				F512581A2896643600DBB43B /* TimePicker.swift */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F512581B2896643600DBB43B /* TimePicker.swift in Sources */,
 				F51257F1289661EF00DBB43B /* ContentView.swift in Sources */,
 				F51257EF289661EF00DBB43B /* TimerApp.swift in Sources */,
 			);
