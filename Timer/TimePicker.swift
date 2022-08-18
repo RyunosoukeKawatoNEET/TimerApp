@@ -10,6 +10,7 @@ struct TimePicker: UIViewRepresentable {
     
     var num: Binding<Int>
     var maxnum: Int
+    var minnum: Int
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -43,7 +44,7 @@ struct TimePicker: UIViewRepresentable {
         }
         ///各行の値の最大値を定義
         func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            return parent.maxnum
+            return parent.maxnum - parent.minnum
         }
         
         ///Pickerの描画の幅
@@ -58,7 +59,7 @@ struct TimePicker: UIViewRepresentable {
         
         ///フォーマットの指定とComponentの返り値の数値をString型にして出力
         func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-            return String(format: "%2d", row)
+            return String(format: "%2d", row + parent.minnum)
         }
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

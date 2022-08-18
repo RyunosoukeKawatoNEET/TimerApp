@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var hour: Int = 8
+    @State private var hour: Int = 0
     @State private var minute: Int = 30
     @State private var seconds: Int = 30
     
@@ -21,14 +21,16 @@ struct ContentView: View {
         NavigationView {
             VStack() {
                 HStack(spacing : 0){
-                    TimePicker(num: $hour, maxnum : 24).frame(width: 70)
+                    TimePicker(num: $hour, maxnum : 24,minnum : 0).frame(width: 70)
                     Text("時間").frame(width: 50, height: 50, alignment: .leading)
-                    TimePicker(num: $minute, maxnum : 60).frame(width: 70)
+                    TimePicker(num: $minute, maxnum : 60, minnum: 0).frame(width: 70)
                     Text("分").frame(width:32,height: 50, alignment: .leading)
-                    TimePicker(num: $seconds, maxnum : 60).frame(width: 70)
+                    TimePicker(num: $seconds, maxnum : 60, minnum :5).frame(width: 70)
                     Text("秒").frame(width:32,height: 50, alignment: .leading)
                 }
-                
+                HStack(spacing:0){
+                    //TimePicker()
+                }
                 Button(action: {
                     page = 1
                 }) {
@@ -36,7 +38,7 @@ struct ContentView: View {
                         .padding()
                 }.frame(width: 200.0, height: 60.0).foregroundColor(.white).background(gradientView(start:Color.orange,end: Color.orange.opacity(0.5))).cornerRadius(20)
                 
-                NavigationLink(destination : SecondView(hour: self.$hour, minute:self.$minute , seconds: self.$seconds),tag: 1, selection: $page) {  }
+                NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds)),tag: 1, selection: $page) {  }
             }
         }
     }
