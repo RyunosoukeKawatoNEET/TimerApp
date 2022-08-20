@@ -10,8 +10,10 @@ import UserNotifications
 
 struct SecondView: View {
     var totaltime : CGFloat
+    var setNum : Int
+    var restSecond : Int
     
-    @State var start = false
+    @State var start : Bool = false
     @State var to : CGFloat = 0
     @State var count : CGFloat = 0
     @State var time = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()

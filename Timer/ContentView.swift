@@ -14,13 +14,12 @@ struct ContentView: View {
     
     //オプション設定
     @State  var setnum: Int = 1
+    @State  var restSecond: Int = 5
     @State  var showPicker: Bool = false
-    
+        
     //画面遷移
-    @State var page : Int? = 0
-    @State var isShowSecondView = false
-    
-    @State var screen: CGSize!
+    //@State var page : Int = 0
+    //@State var isShowSecondView: Bool = false
     
     var body: some View {
         NavigationView {
@@ -58,26 +57,31 @@ struct ContentView: View {
                     }) {
                         VStack(){
                             Text("休憩").padding(.horizontal).padding(.top)
-                            Text("\(setnum)" + "秒").padding()
+                            Text("\(self.restSecond) 秒").padding()
                             Spacer()
                         }
                         .frame(width: 150.0, height: 80.0)
                         .foregroundColor(.white)
                         .background(Color.green).cornerRadius(10).padding(.trailing)
                     }
-                    
                 }
                 ZStack{
+                    NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds,setnum:self.setnum,restSecond:self.restSecond))) {
                     Button(action: {
-                        page = 1
+                        //page = 1
                     }) {
                         Text("開始")
                             .padding()
-                    }.frame(width: 320.0, height: 60.0).foregroundColor(.white).background(gradientView(start:Color.orange,end: Color.orange.opacity(0.5))).cornerRadius(10).padding(.horizontal)
+                    }.frame(width: 320.0, height: 60.0)
+                        .foregroundColor(.white)
+                        .background(Color.orange).cornerRadius(10).padding(.horizontal)
+                    }
+
+//                    NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds,setnum:self.setnum,restSecond:self.restSecond)),tag: 1, selection: $page) {  }
                     
-                    NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds)),tag: 1, selection: $page) {  }
-                    
-                    playerPicker(setnum: self.$setnum, showPicker: self.$showPicker).offset(y: self.showPicker ? 0 : UIScreen.main.bounds.height).frame(alignment: .bottom)
+                    //下に表示するPickerのView
+                    underPicker(setNum: self.$setnum, showPicker: self.$showPicker, minNum: 1,maxNum: 50,unit: "回").offset(y: self.showPicker ? 0 : UIScreen.main.bounds.height).frame(alignment: .bottom)
+
                 }
             }
         }
@@ -91,9 +95,12 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct playerPicker: View {
-    @Binding  var setnum: Int
+struct underPicker: View {
+    @Binding  var setNum: Int
     @Binding  var showPicker: Bool
+    let minNum: Int
+    let maxNum: Int
+    let unit: String
     
     var body: some View {
         VStack(){
@@ -110,19 +117,19 @@ struct playerPicker: View {
                 }
             }
             //ユーザを入力するピッカー
-            Picker(selection: self.$setnum, label: Text("")) {
-                ForEach(1..<51){index in
-                    Text("\(index)")
+            Picker(selection: self.$setNum, label: Text("")) {
+                ForEach(minNum ..< maxNum, id: \.self){index in
+                    if self.check(unit: unit,index: index){
+                        Text("\(index) \(unit)")
+                    }else{
+                        Text("\(index) \(unit)")
+                    }
                 }
             }.pickerStyle(WheelPickerStyle()).background(Color(red: 0.95, green: 0.95, blue: 0.97, opacity: 1.0))
         }.background(Color(red: 0.9, green: 0.9, blue: 0.92, opacity: 1.0)).frame(height:60)
     }
+    func check(unit:String,index: Int) -> Bool {
+        unit == "秒" && index % 5 == 0
+    }
 }
 
-
-func gradientView(start: Color, end: Color) -> LinearGradient {
-    return LinearGradient(
-        gradient: Gradient(colors: [start, end]),
-        startPoint: .leading,
-        endPoint: .trailing)
-}
