@@ -13,13 +13,14 @@ struct ContentView: View {
     @State private var seconds: Int = 30
     
     //オプション設定
-    @State  var setnum: Int = 1
+    @State  var setNum: Int = 1
     @State  var restSecond: Int = 5
-    @State  var showPicker: Bool = false
+    @State  var showPickerSet: Bool = false
+    @State  var showPickerRest: Bool = false
         
     //画面遷移
-    //@State var page : Int = 0
-    //@State var isShowSecondView: Bool = false
+    @State var page : Int? = 0
+    @State var isShowSecondView: Bool = false
     
     var body: some View {
         NavigationView {
@@ -37,12 +38,12 @@ struct ContentView: View {
                     Button(action: {
                         withAnimation(.default){
                             //Pickerの表示・非表示を切り替える
-                            self.showPicker.toggle()
+                            self.showPickerSet.toggle()
                         }
                     }) {
                         VStack(){
                             Text("セット数").padding(.horizontal).padding(.top)
-                            Text("\(self.setnum) 回").padding()
+                            Text("\(self.setNum) 回").padding()
                             Spacer()
                         }
                         .frame(width: 150.0, height: 80.0)
@@ -52,7 +53,7 @@ struct ContentView: View {
                     Button(action: {
                         withAnimation(.default){
                             //Pickerの表示・非表示を切り替える
-                            self.showPicker.toggle()
+                            self.showPickerRest.toggle()
                         }
                     }) {
                         VStack(){
@@ -66,25 +67,34 @@ struct ContentView: View {
                     }
                 }
                 ZStack{
-                    NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds,setnum:self.setnum,restSecond:self.restSecond))) {
                     Button(action: {
-                        //page = 1
+                        page = 1
                     }) {
                         Text("開始")
                             .padding()
                     }.frame(width: 320.0, height: 60.0)
                         .foregroundColor(.white)
                         .background(Color.orange).cornerRadius(10).padding(.horizontal)
-                    }
 
-//                    NavigationLink(destination : SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds,setnum:self.setnum,restSecond:self.restSecond)),tag: 1, selection: $page) {  }
+                    NavigationLink(destination:
+                                    //SecondView(totaltime:CGFloat((self.hour*3600)+(self.minute*60)+self.seconds),
+                                   SecondView(totaltime:calcTime(hour: self.hour,minute: self.minute,seconds: self.seconds),
+                                               setNum:self.setNum,
+                                               restSecond:self.restSecond),
+                                   tag: 1, selection: $page) {  }
                     
                     //下に表示するPickerのView
-                    underPicker(setNum: self.$setnum, showPicker: self.$showPicker, minNum: 1,maxNum: 50,unit: "回").offset(y: self.showPicker ? 0 : UIScreen.main.bounds.height).frame(alignment: .bottom)
-
+                    underPicker(setNum: self.$setNum, showPicker: self.$showPickerSet, minNum: 1,maxNum: 50,unit: "回").offset(y: self.showPickerSet ? 0 : UIScreen.main.bounds.height).frame(alignment: .bottom)
+                    
+                    underPicker(setNum: self.$restSecond, showPicker: self.$showPickerRest, minNum: 5,maxNum: 1000,unit: "秒").offset(y: self.showPickerRest ? 0 : UIScreen.main.bounds.height).frame(alignment: .bottom)
                 }
             }
         }
+    }
+    func calcTime(hour:Int,minute:Int,seconds:Int) -> CGFloat {
+        //secondsの最小値の補正のため+5する
+        let totaltime = hour * 3600 + minute * 60 + (seconds + 5)
+        return CGFloat(totaltime)
     }
 }
 
@@ -119,17 +129,14 @@ struct underPicker: View {
             //ユーザを入力するピッカー
             Picker(selection: self.$setNum, label: Text("")) {
                 ForEach(minNum ..< maxNum, id: \.self){index in
-                    if self.check(unit: unit,index: index){
+                    if unit == "秒" && index % 5 == 0 {
                         Text("\(index) \(unit)")
-                    }else{
+                    }else if unit == "回"{
                         Text("\(index) \(unit)")
                     }
                 }
             }.pickerStyle(WheelPickerStyle()).background(Color(red: 0.95, green: 0.95, blue: 0.97, opacity: 1.0))
         }.background(Color(red: 0.9, green: 0.9, blue: 0.92, opacity: 1.0)).frame(height:60)
-    }
-    func check(unit:String,index: Int) -> Bool {
-        unit == "秒" && index % 5 == 0
     }
 }
 
