@@ -31,7 +31,7 @@ struct SecondView: View {
     var body: some View {
         VStack{
             //Text("\(self.totaltime)")
-            CircleV(to : self.$to,count : self.$count,start: self.start,outputSeconds : self.outputSeconds)
+            CircleV(to : self.$to,count : self.$count,start: self.$start,outputSeconds : self.outputSeconds,setCount : self.$setCount,totaltime:self.totaltime)
             optionInfo(setNum: self.setNum,setCount: self.setCount,restSecond: self.restSecond,totaltime : self.totaltime)
             ButtonV1(isStop : self.$isStop,to : self.$to,count : self.$count,totaltime : self.totaltime,
                      setCount : self.$setCount,
@@ -78,8 +78,10 @@ struct SecondView: View {
 struct CircleV : View{
     @Binding var to: CGFloat
     @Binding var count: CGFloat
-    var start: Bool
+    @Binding var start: Bool //true:運動中 false:休憩中
     var outputSeconds:CGFloat
+    @Binding var setCount:Int //現在のセット数
+    var totaltime :CGFloat
     
     var body: some View{
         ZStack{
@@ -99,8 +101,20 @@ struct CircleV : View{
             VStack{
                 Text(printdata(totaltimemin:TimeInterval(self.outputSeconds - self.count + 0.99999999))).font(.system(size: 65))
                     .fontWeight(.bold)
+                
+                Text(outPutState(start:self.start,setCount:self.setCount,totaltime: self.totaltime)).foregroundColor(Color(self.start  ? .red : .blue ))
+                }
             }
         }
+    }
+
+func outPutState(start: Bool,setCount: Int,totaltime:CGFloat) -> String{
+    if (!start) && setCount == 0 {
+        return "準備"
+    }else if start{
+        return "/ " + printdata(totaltimemin:TimeInterval(totaltime))
+    }else{
+        return "休憩"
     }
 }
 
@@ -204,6 +218,7 @@ func printdata(totaltimemin:TimeInterval) -> String{
     
     dateFormatter.unitsStyle = .positional
     dateFormatter.allowedUnits = [.hour, .minute, .second]
-    dateFormatter.zeroFormattingBehavior = .pad
-    return (dateFormatter.string(from: totaltimemin)!)
+    //dateFormatter.zeroFormattingBehavior = .pad
+    return (dateFormatter.string(from: totaltimemin)!).replacingOccurrences(of: "00:", with: "")
 }
+
